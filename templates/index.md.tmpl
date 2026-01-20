@@ -1,0 +1,78 @@
+---
+page_title: "Provider: Bridge"
+description: |-
+  The JFrog Bridge provider is used to manage JFrog Bridge connections between JPDs.
+---
+
+# Bridge Provider
+
+{{ .Description | trimspace }}
+
+## Example Usage
+
+{{ tffile "examples/provider/provider.tf" }}
+
+### Create a Bridge
+
+```terraform
+resource "bridge" "example" {
+  bridge_id     = "my-bridge"
+  pairing_token = var.pairing_token  # Required on create
+
+  remote = {
+    url = "https://saas-jpd.jfrog.io"
+  }
+
+  local = {
+    url = "https://self-managed-jpd:8082"
+  }
+}
+```
+
+## Authentication
+
+The Bridge provider supports several ways to authenticate:
+
+### Access Token (Recommended)
+
+The provider requires an Access Token with Admin privileges to interact with the Bridge API.
+
+```terraform
+provider "bridge" {
+  url          = "https://myinstance.jfrog.io"
+  access_token = "my-admin-token"
+  insecure     = false  # Set to true to skip TLS verification
+}
+```
+
+You can also use environment variables:
+
+```bash
+export JFROG_URL="https://myinstance.jfrog.io"
+export JFROG_ACCESS_TOKEN="my-admin-token"
+```
+
+### OIDC Provider
+
+```terraform
+provider "bridge" {
+  url                = "https://myinstance.jfrog.io"
+  oidc_provider_name = "my-oidc-provider"
+}
+```
+
+### Terraform Cloud Workload Identity
+
+When running in Terraform Cloud with proper OIDC configuration, the provider can automatically use workload identity tokens.
+
+## Schema
+
+{{ .SchemaMarkdown | trimspace }}
+
+## Bridge API Endpoints
+
+This provider uses the following JFrog Bridge Client API endpoints:
+
+* `POST /bridge-client/api/v1/bridges` - Create a new bridge
+* `PATCH /bridge-client/api/v1/bridges/{id}` - Update bridge configuration
+* `DELETE /bridge-client/api/v1/bridges/{id}` - Delete a bridge
