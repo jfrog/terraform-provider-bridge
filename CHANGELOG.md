@@ -1,3 +1,9 @@
+## 1.1.0 (February 24, 2026)
+
+FEATURES:
+
+* **New Resource:** `bridge_bridges_stop` PR: [#5](https://github.com/jfrog/terraform-provider-bridge/pull/5)
+
 ## 1.0.0 (January 22, 2026)
 
 FEATURES:
